@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CourseRequest;
 use App\Models\Course;
-use Illuminate\Http\Request;
+use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CourseController extends Controller
 {
+    // Listar os cursos
     public function index()
     {
         //dd("Listar");
@@ -23,6 +26,9 @@ class CourseController extends Controller
 
         // Retorna os registro na ordem crescente de name
         $courses = Course::orderBy('name', 'asc')->get();
+
+        // Salvar log
+        Log::info('Listar os cursos');
 
         // Retorna todos os registros de forma paginada
         // $courses = Course::paginate(1);
@@ -43,11 +49,30 @@ class CourseController extends Controller
         //dd($request);
         //Course::create($request->all());
         // o $request->'name' abaixo é o nome do campo
-        $course = Course::create([
-            'name' => $request->name,
-            'price' => str_replace(',', '.', $request->price)
-        ]);
-        return redirect()->route('courses.show', ['course' => $course->id])->with('success', 'Curso criado com sucesso!');
+
+        DB::beginTransaction();
+
+        try {
+            $course = Course::create([
+                'name' => $request->name,
+                'price' => str_replace(',', '.', $request->price)
+            ]);
+
+
+            DB::commit();
+
+            // Salvar log
+            Log::info('Curso cadastrado. ' . $course->name, ['course_id' => $course->id]);
+
+            return redirect()->route('courses.show', ['course' => $course->id])->with('success', 'Curso criado com sucesso!');
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            // Salvar log
+            Log::warning('Curso não cadastrado.', ['error' => $e->getMessage()]);
+
+            return back()->withInput()->with('error', 'Erro ao criar o curso!');
+        }
     }
     // public function show(Request $request)
     // {
@@ -63,7 +88,11 @@ class CourseController extends Controller
     {
         //dd($request->course);
         //$course = Course::where('id', $request->course)->first();
-        //dd($course);
+        // dd($course);
+
+        // Salvar log
+        Log::info('Visualizar o curso: ' . $course->name, ['course_id' => $course->id]);
+
         return view('courses.show', ['course' => $course]);
     }
 
@@ -83,21 +112,52 @@ class CourseController extends Controller
         // Incluir essa linha para validação, utilizando a classe CourseRequest
         $request->validated();
 
-        $course->update([
-            'name' => $request->name,
-            'price' => str_replace(',', '.', $request->price)
-        ]);
+        DB::beginTransaction();
 
-        return redirect()->route('courses.show', ['course' => $course->id])
-            ->with('success', 'Curso atualizado com sucesso!');
+        try {
+
+            $course->update([
+                'name' => $request->name,
+                'price' => str_replace(',', '.', $request->price)
+            ]);
+
+            DB::commit();
+
+            // Salvar log
+            Log::info('Curso editado. ' . $course->name, ['course_id' => $course->id]);
+
+            return redirect()->route('courses.show', ['course' => $course->id])
+                ->with('success', 'Curso atualizado com sucesso!');
+        } catch (Exception $e) {
+
+            DB::rollBack();
+
+            // Salvar log
+            Log::notice('Curso não editado. ', ['error' => $e->getMessage()]);
+
+            return back()->withInput()->with('error', 'Erro ao atualizar o curso!');
+        }
     }
+
 
     public function destroy(Course $course)
     {
         //dd($course);
-        $course->delete();
+        try {
 
-        return redirect()->route('courses.index')->with('success', 'Curso excluído com sucesso!');
 
+            $course->delete();
+
+            // Salvar log
+            Log::info('Curso excluído. ' . $course->name, ['course_id' => $course->id]);
+
+            return redirect()->route('courses.index')->with('success', 'Curso excluído com sucesso!');
+        } catch (Exception $e) {
+
+            // Salvar log
+            Log::notice('Curso não excluído. ', ['error' => $e->getMessage()]);
+
+            return redirect()->route('courses.index')->with('error', 'Erro ao excluir o curso!');
+        }
     }
 }

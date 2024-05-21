@@ -12,6 +12,13 @@
             <button type="button">Listar</button>
         </a>
     </span>
+
+    <span style="widht: 100; display:inline-block;">
+        <a href="{{ route('lessons.index', $course->id) }}">
+            <button type="button">Aulas</button>
+        </a>
+    </span>
+
     <span style="widht: 100; display:inline-block;">
         <a href="{{ route('courses.edit', $course->id) }}">
             <button type="button">Editar</button>
