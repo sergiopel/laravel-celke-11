@@ -25,7 +25,9 @@ class CourseController extends Controller
         //$courses = Course::orderBy('id', 'desc')->get();
 
         // Retorna os registro na ordem crescente de name
-        $courses = Course::orderBy('name', 'asc')->get();
+        $courses = Course::orderBy('name', 'asc')
+            // ->where('id', 1000)
+            ->get();
 
         // Salvar log
         Log::info('Listar os cursos');

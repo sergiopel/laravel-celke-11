@@ -1,39 +1,80 @@
 @extends('layouts.admin') {{-- extendendo o layout do admin --}}
 
 @section('content')
+    <div class="container-fluid px-4">
+        <div class="mb-1 hstack gap-2">
+            <h2 class="mt-3">Aulas - {{ $course->name }}</h2>
 
-    <h2>Listar as Aulas</h2>
+            <ol class="breadcrumb mb-3 mt-3 ms-auto">
+                <li class="breadcrumb-item">
+                    <a href="#" class="text-decoration-none">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active">Cursos</li>
+            </ol>
 
-    {{-- {{ dd($course) }} --}}
+        </div>
 
-    <a href="{{ route('courses.index') }}"><button type="button">Cursos</button></a><br><br>
-    <a href="{{ route('lessons.create', ['course' => $course->id]) }}"><button type="button">Cadastrar</button></a><br><br>
+        <div class="card mb-4">
+            <div class="card-header hstack gap-2">
+                <span>Listar</span>
 
-    <x-alert />
+                <span class="ms-auto">
+                    <a href="{{ route('lessons.create', ['course' => $course->id]) }}" class="btn btn-success btn-sm">Cadastrar</a>
+                </span>
 
-    @forelse ($lessons as $lesson)
-        ID: {{ $lesson->id }} <br>
-        Nome: {{ $lesson->name }} <br>
-        Descricão: {{ $lesson->description }} <br>
-        Ordem: {{ $lesson->order_lesson }} <br>
-        Curso: {{ $lesson->course->name }} <br>
-        Criado em: {{ \Carbon\Carbon::parse($lesson->created_at)->format('d/m/Y H:i:s') }} <br>
-        Atualizado em: {{ \Carbon\Carbon::parse($lesson->updated_at)->format('d/m/Y H:i:s') }} <br><br>
-        <a href="{{ route('lessons.show', ['lesson' => $lesson->id]) }}"><button type="button">Visualizar</button></a><br><br>
-        <a href="{{ route('lessons.edit', ['lesson' => $lesson->id]) }}"><button type="button">Editar</button></a><br><br>
+            </div>
 
-        <form action="{{ route('lessons.destroy', ['lesson' => $lesson->id]) }}" method="POST">
-            @csrf
-            @method('DELETE')
-            <button type="submit" onclick="return confirm('Tem certeza que deseja excluir a aula?')">Excluir</button>
-        </form>
+            <div class="card-body">
 
-        <hr>
+                <x-alert />
 
+                <table class="table table-striped table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="d-none d-sm-table-cell">ID</th>
+                            <th>Nome</th>
+                            <th class="d-none d-md-table-cell">Descrição</th>
+                            <th class="text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($lessons as $lesson)
+                            <tr>
+                                <th class="d-none d-sm-table-cell">{{ $lesson->id }}</th>
+                                <td>{{ $lesson->name }}</td>
+                                <td class="d-none d-md-table-cell">{{ $lesson->description }}</td>
 
-    @empty
-        <p style="color: #f00;">Nenhuma aula encontrada!</p>
-    @endforelse
+                                <td class="d-md-flex flex-row justify-content-center">
+                                    <a href="{{ route('lessons.show', $lesson->id) }}"
+                                        class="btn btn-primary btn-sm me-1 mb-1 mb-md-0">Visualizar</a>
+                                    {{-- Eu poderia fazer desse jeito também:
+                                     <a href="{{ route('courses.show', ['course' => $course->id]) }}">Visualizar</a> --}}
 
+                                    <a href="{{ route('lessons.edit', $lesson->id) }}"
+                                        class="btn btn-warning btn-sm me-1 mb-1 mb-md-0">Editar</a>
+
+                                    {{-- Para deletar sou obrigado a usar um 'form' e forçar o método 'delete' --}}
+                                    {{-- <a href="{{ route('courses.destroy', $course->id) }}">Deletar</a> --}}
+                                    <form action="{{ route('lessons.destroy', $lesson->id) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm me-1"
+                                            onclick="return confirm('Tem certeza que deseja deletar?')">Deletar</button>
+                                    </form>
+
+                                </td>
+                            </tr>
+                        @empty
+                            <div class="alert alert-danger" role="alert">
+                                Nenhum registro encontrado!
+                            </div>
+                        @endforelse
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
 
 @endsection
