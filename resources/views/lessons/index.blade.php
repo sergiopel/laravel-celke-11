@@ -9,17 +9,21 @@
                 <li class="breadcrumb-item">
                     <a href="#" class="text-decoration-none">Dashboard</a>
                 </li>
-                <li class="breadcrumb-item active">Cursos</li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('courses.index') }}" class="text-decoration-none">Cursos</a>
+                </li>
+                <li class="breadcrumb-item active">Aulas</li>
             </ol>
 
         </div>
 
-        <div class="card mb-4">
+        <div class="card mb-4 border-light shadow">
             <div class="card-header hstack gap-2">
                 <span>Listar</span>
 
-                <span class="ms-auto">
-                    <a href="{{ route('lessons.create', ['course' => $course->id]) }}" class="btn btn-success btn-sm">Cadastrar</a>
+                <span class="ms-auto d-sm-flex flex-row">
+                    <a href="{{ route('courses.show', ['course' => $course->id]) }}" class="btn btn-primary btn-sm me-1 mb-1 mb-sm-0">Curso</a>
+                    <a href="{{ route('lessons.create', ['course' => $course->id]) }}" class="btn btn-success btn-sm me-1 mb-1 mb-sm-0"><i class="fa-regular fa-square-plus"></i> Cadastrar</a>
                 </span>
 
             </div>
@@ -46,12 +50,12 @@
 
                                 <td class="d-md-flex flex-row justify-content-center">
                                     <a href="{{ route('lessons.show', $lesson->id) }}"
-                                        class="btn btn-primary btn-sm me-1 mb-1 mb-md-0">Visualizar</a>
+                                        class="btn btn-primary btn-sm me-1 mb-1 mb-md-0"><i class="fa-regular fa-eye"></i> Visualizar</a>
                                     {{-- Eu poderia fazer desse jeito também:
                                      <a href="{{ route('courses.show', ['course' => $course->id]) }}">Visualizar</a> --}}
 
                                     <a href="{{ route('lessons.edit', $lesson->id) }}"
-                                        class="btn btn-warning btn-sm me-1 mb-1 mb-md-0">Editar</a>
+                                        class="btn btn-warning btn-sm me-1 mb-1 mb-md-0"><i class="fa-regular fa-pen-to-square"></i> Editar</a>
 
                                     {{-- Para deletar sou obrigado a usar um 'form' e forçar o método 'delete' --}}
                                     {{-- <a href="{{ route('courses.destroy', $course->id) }}">Deletar</a> --}}
@@ -59,7 +63,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="btn btn-danger btn-sm me-1"
-                                            onclick="return confirm('Tem certeza que deseja deletar?')">Deletar</button>
+                                            onclick="return confirm('Tem certeza que deseja deletar?')"><i class="fa-regular fa-trash-can"></i> Deletar</button>
                                     </form>
 
                                 </td>
@@ -71,6 +75,9 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{-- Imprimir a paginação --}}
+                {{ $lessons->links() }}
+
 
             </div>
 

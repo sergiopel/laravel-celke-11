@@ -17,17 +17,18 @@ class LessonController extends Controller
         $lessons = Lesson::with('course')
             ->where('course_id', $course->id)
             ->orderBy('order_lesson', 'asc')
-            ->get();
+            //->get();
+            ->paginate(5);
 
         // Carregar a view e passar o array de aulas como parâmetro
-        return view('lessons.index', ['course' => $course, 'lessons' => $lessons]);
+        return view('lessons.index', ['course' => $course, 'lessons' => $lessons, 'menu' => 'courses']);
     }
 
     // Carregar o formulário para criar uma nova aula
     public function create(Course $course)
     {
         // Carregar a view
-        return view('lessons.create', ['course' => $course]);
+        return view('lessons.create', ['course' => $course, 'menu' => 'courses']);
     }
 
     // Armazenar uma nova aula
@@ -78,7 +79,7 @@ class LessonController extends Controller
     public function show(Lesson $lesson)
     {
         // dd($lesson);
-        return view('lessons.show', ['lesson' => $lesson]);
+        return view('lessons.show', ['lesson' => $lesson, 'menu' => 'courses']);
     }
 
 
@@ -86,7 +87,7 @@ class LessonController extends Controller
     public function edit(Lesson $lesson)
     {
         // Carregar a view e passar o array de aulas como parâmetro
-        return view('lessons.edit', ['lesson' => $lesson]);
+        return view('lessons.edit', ['lesson' => $lesson, 'menu' => 'courses']);
     }
 
     // Atualizar uma aula

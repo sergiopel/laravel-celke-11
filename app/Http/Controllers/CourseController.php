@@ -27,7 +27,8 @@ class CourseController extends Controller
         // Retorna os registro na ordem crescente de name
         $courses = Course::orderBy('name', 'asc')
             // ->where('id', 1000)
-            ->get();
+            //->get();
+            ->paginate(9);
 
         // Salvar log
         Log::info('Listar os cursos');
@@ -35,12 +36,12 @@ class CourseController extends Controller
         // Retorna todos os registros de forma paginada
         // $courses = Course::paginate(1);
 
-        return view('courses.index', ['courses' => $courses]);
+        return view('courses.index', ['courses' => $courses, 'menu' => 'courses']);
     }
     public function create()
     {
         //dd("Listar");
-        return view('courses.create');
+        return view('courses.create', ['menu' => 'courses']);
     }
     public function store(CourseRequest $request)
     {
@@ -54,10 +55,12 @@ class CourseController extends Controller
 
         DB::beginTransaction();
 
+        //dd($request->price);
+
         try {
             $course = Course::create([
                 'name' => $request->name,
-                'price' => str_replace(',', '.', $request->price)
+                'price' => str_replace(',', '.', str_replace('.', '', $request->price)),
             ]);
 
 
@@ -95,13 +98,13 @@ class CourseController extends Controller
         // Salvar log
         Log::info('Visualizar o curso: ' . $course->name, ['course_id' => $course->id]);
 
-        return view('courses.show', ['course' => $course]);
+        return view('courses.show', ['course' => $course, 'menu' => 'courses']);
     }
 
     public function edit(Course $course)
     {
         //dd($course);
-        return view('courses.edit', ['course' => $course]);
+        return view('courses.edit', ['course' => $course, 'menu' => 'courses']);
     }
 
     //Request $request = recupero dados do formulário
@@ -120,7 +123,7 @@ class CourseController extends Controller
 
             $course->update([
                 'name' => $request->name,
-                'price' => str_replace(',', '.', $request->price)
+                'price' => str_replace(',', '.', str_replace('.', '', $request->price)),
             ]);
 
             DB::commit();

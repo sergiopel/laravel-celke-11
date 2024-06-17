@@ -2,31 +2,64 @@
 
 @section('content')
 
-    <h2>Editar a aula</h2>
+<div class="container-fluid px-4">
+    <div class="mb-1 hstack gap-2">
+        <h2 class="mt-3">Aula</h2>
 
-    {{-- {{ dd($lesson) }} --}}
+        <ol class="breadcrumb mb-3 mt-3 ms-auto">
+            <li class="breadcrumb-item">
+                <a href="#" class="text-decoration-none">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('courses.index') }}" class="text-decoration-none">Cursos</a>
+            </li>
+            <li class="breadcrumb-item active">Curso</li>
+        </ol>
 
-    <a href="{{ route('lessons.index', ['course' => $lesson->course_id]) }}">
-        <button type="button">Aulas</button>
-    </a><br><br>
+    </div>
 
-    <x-alert />
+    <div class="card mb-4  border-light shadow">
+        <div class="card-header hstack gap-2">
+            <span>Editar</span>
 
-    <form action="{{ route('lessons.update', ['lesson' => $lesson->id]) }}" method="post">
-        @csrf
-        @method('PUT')
+            <span class="ms-auto d-sm-flex flex-row">
+                <a href="{{ route('lessons.index', ['course' => $lesson->course_id]) }}" class="btn btn-info btn-sm me-1 mb-1 mb-sm-0"><i class="fa-solid fa-list"></i> Listar</a>
+                <a href="{{ route('lessons.show', $lesson->id) }}" class="btn btn-primary btn-sm me-1 mb-1 mb-sm-0"><i class="fa-regular fa-eye"></i> Visualizar</a>
+            </span>
 
-        {{-- {{ dd($lesson->course->name) }} --}}
+        </div>
 
-        <label>Curso: </label>
-        <input type="text" name="course" value="{{ $lesson->course->name }}" disabled><br><br>
-        <label>Nome: </label>
-        <input type="text" name="name" placeholder="Nome da aula" value="{{ old('name', $lesson->name) }}" required><br><br>
-        <label>Descricão: </label>
-        <textarea name="description" id="description" cols="30" rows="4" required>{{ old('description', $lesson->description) }}</textarea><br><br>
 
-        <button type="submit">Atualizar</button>
+        <div class="card-body">
 
-    </form>
+            <x-alert />
+            <form class="row g-3" action="{{ route('lessons.update', $lesson->id) }}" method="POST">
+
+                @csrf
+                @method('PUT')
+
+                <div class="col-12">
+                    <label class="form-label">Curso</label>
+                    <input type="text" class="form-control" name="course" value="{{ old('course', $lesson->course->name) }}" disabled>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Nome</label>
+                    <input type="text" class="form-control" name="name" value="{{ old('name', $lesson->name) }}" required>
+                </div>
+                <div class="col-12">
+                    <label for="description" class="form-label">Descricão</label>
+                    <textarea class="form-control" name="description" id="description" cols="30" rows="4" placeholder="Conteúdo da aula" required>{{ old('description', $lesson->description) }}
+                    </textarea>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-warning">Atualizar</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
 
 @endsection

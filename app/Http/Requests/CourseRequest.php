@@ -23,9 +23,10 @@ class CourseRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'price' => 'required|regex:/^\d{1,8}(\,\d{1,2})?$/',
+            //'price' => 'required|regex:/^\d{1,8}(\,\d{1,2})?$/',
             //a linha regex acima diz que aceita apenas números com no màximo 8 inteiros e 2 casas decimais
             //e usa a virgula como separador
+            'price' => 'required|max:10',
         ];
     }
 
@@ -34,7 +35,8 @@ class CourseRequest extends FormRequest
         return [
             'name.required' => 'O campo \'Nome do Curso\' é obrigatório',
             'price.required' => 'O campo \'Preço do Curso\' é obrigatório',
-            'price.regex' => 'O campo \'Preço do Curso\' deve ser um número com até 8 inteiros e 2 casas decimais (use a vírgula como separador)',
+            'price.max' => 'O preço só pode ter no máximo 8 números!',
+            //'price.regex' => 'O campo \'Preço do Curso\' deve ser um número com até 8 inteiros e 2 casas decimais (use a vírgula como separador)',
         ];
     }
 }

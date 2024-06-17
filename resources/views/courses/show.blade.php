@@ -1,44 +1,72 @@
 @extends('layouts.admin') {{-- extendendo o layout do admin --}}
 
 @section('content')
-    <h2>Detalhes do curso</h2>
+    <div class="container-fluid px-4">
+        <div class="mb-1 hstack gap-2">
+            <h2 class="mt-3">Detalhes do Curso</h2>
 
-    <span style="widht: 100; display:inline-block;">
-        <a href="{{ route('courses.create') }}"><button type="button">Criar</button></a>
-    </span>
+            <ol class="breadcrumb mb-3 mt-3 ms-auto">
+                <li class="breadcrumb-item">
+                    <a href="#" class="text-decoration-none">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('courses.index') }}" class="text-decoration-none">Cursos</a>
+                </li>
+                <li class="breadcrumb-item active">Curso</li>
+            </ol>
 
-    <span style="widht: 100; display:inline-block;">
-        <a href="{{ route('courses.index') }}">
-            <button type="button">Listar</button>
-        </a>
-    </span>
+        </div>
 
-    <span style="widht: 100; display:inline-block;">
-        <a href="{{ route('lessons.index', $course->id) }}">
-            <button type="button">Aulas</button>
-        </a>
-    </span>
+        <div class="card mb-4 border-light shadow">
+            <div class="card-header hstack gap-2">
+                <span>Visualizar</span>
 
-    <span style="widht: 100; display:inline-block;">
-        <a href="{{ route('courses.edit', $course->id) }}">
-            <button type="button">Editar</button>
-        </a>
-    </span>
-    <span style="widht: 100; display:inline-block;">
-        <form action="{{ route('courses.destroy', $course->id) }}" method="post">
-            @csrf
-            @method('DELETE')
-            <button type="submit" onclick="return confirm('Tem certeza que deseja deletar?')">Deletar</button>
-        </form>
-    </span>
+                <span class="ms-auto d-sm-flex flex-row">
+                    {{-- <a href="{{ route('courses.create') }}" class="btn btn-success btn-sm me-1 mb-1 mb-sm-0">Cadastrar</a> --}}
+                    <a href="{{ route('lessons.index', $course->id) }}" class="btn btn-info btn-sm me-1 mb-1 mb-sm-0"><i
+                            class="fa-solid fa-list"></i> Aulas</a>
+                    <a href="{{ route('courses.index') }}" class="btn btn-info btn-sm me-1 mb-1 mb-sm-0"> <i
+                            class="fa-solid fa-list"></i> Listar</a>
+                    <a href="{{ route('courses.edit', $course->id) }}"
+                        class="btn btn-warning btn-sm me-1 mb-1 mb-sm-0"><i class="fa-regular fa-pen-to-square"></i> Editar</a>
+                    <form action="{{ route('courses.destroy', $course->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Tem certeza que deseja deletar este curso?')"><i
+                                class="fa-regular fa-trash-can"></i> Deletar</button>
+                    </form>
+                </span>
 
-    <x-alert />
+            </div>
 
-    <div>
-        <p>ID: {{ $course->id }}</p>
-        <p>Nome: {{ $course->name }}</p>
-        <p>Preço: {{ 'R$ ' . number_format($course->price, 2, ',', '.') }}</p>
-        <p>Data Cadastro: {{ \Carbon\Carbon::parse($course->created_at)->format('d/m/Y H:i:s') }}</p>
-        <p>Data Alteração: {{ \Carbon\Carbon::parse($course->updated_at)->format('d/m/Y H:i:s') }}</p>
+            <div class="card-body">
+
+                <x-alert />
+
+                <dl class="row">
+
+                    <dt class="col-sm-3">ID:</dt>
+                    <dd class="col-sm-9">{{ $course->id }}</dd>
+
+                    <dt class="col-sm-3">Nome:</dt>
+                    <dd class="col-sm-9">{{ $course->name }}</dd>
+
+                    <dt class="col-sm-3">Preço:</dt>
+                    <dd class="col-sm-9">{{ 'R$ ' . number_format($course->price, 2, ',', '.') }}</dd>
+
+                    <dt class="col-sm-3">Data Cadastro:</dt>
+                    <dd class="col-sm-9">{{ \Carbon\Carbon::parse($course->created_at)->format('d/m/Y H:i:s') }}</dd>
+
+                    <dt class="col-sm-3">Data Alteração:</dt>
+                    <dd class="col-sm-9">{{ \Carbon\Carbon::parse($course->updated_at)->format('d/m/Y H:i:s') }}</dd>
+
+                </dl>
+
+            </div>
+
+        </div>
+
+
     </div>
 @endsection

@@ -4,16 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/styles_sbadmin.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/fontawesome.all.min.css') }}" rel="stylesheet">
+    @vite(['resources/css/app.css','resources/js/app.js'])
 
-    <title>Sergio - Celke</title>
+    <title>Sergio</title>
 </head>
 <body>
 
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-nav">
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" href="#">Código na Web</a>
         <!-- Sidebar Toggle-->
@@ -37,14 +36,15 @@
 
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
-            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <nav class="sb-sidenav accordion sb-sidenav-five" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <a class="nav-link" href="#">
+                        <a @class(['nav-link', 'active' => isset($menu) && $menu == 'dashboard']) href="{{ route('dashboard.index') }}">
                             <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                             Dashboard
                         </a>
-                        <a class="nav-link" href="{{ route('courses.index') }}">
+
+                        <a @class(['nav-link', 'active' => isset($menu) && $menu == 'courses']) href="{{ route('courses.index') }}">
                             <div class="sb-nav-link-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
                             Cursos
                         </a>
@@ -82,11 +82,6 @@
         </div>
     </div>
 
-
-
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('js/scripts_sbadmin.js') }}"></script>
-    <script src="{{ asset('js/fontawesome.all.min.js') }}" crossorigin="anonymous"></script>
 
 </body>
 </html>

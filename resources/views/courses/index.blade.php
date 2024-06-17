@@ -14,12 +14,12 @@
 
         </div>
 
-        <div class="card mb-4">
+        <div class="card mb-4 border-light shadow">
             <div class="card-header hstack gap-2">
                 <span>Listar</span>
 
                 <span class="ms-auto">
-                    <a href="{{ route('courses.create') }}" class="btn btn-success btn-sm">Cadastrar</a>
+                    <a href="{{ route('courses.create') }}" class="btn btn-success btn-sm"><i class="fa-regular fa-square-plus"></i> Cadastrar</a>
                 </span>
 
             </div>
@@ -46,15 +46,15 @@
                                 </td>
                                 <td class="d-md-flex flex-row justify-content-center">
                                     <a href="{{ route('lessons.index', $course->id) }}"
-                                        class="btn btn-info btn-sm me-1 mb-1 mb-md-0">Aulas</a>
+                                        class="btn btn-info btn-sm me-1 mb-1 mb-md-0"><i class="fa-solid fa-list"></i> Aulas</a>
 
                                     <a href="{{ route('courses.show', $course->id) }}"
-                                        class="btn btn-primary btn-sm me-1 mb-1 mb-md-0">Visualizar</a>
+                                        class="btn btn-primary btn-sm me-1 mb-1 mb-md-0"><i class="fa-regular fa-eye"></i> Visualizar</a>
                                     {{-- Eu poderia fazer desse jeito também:
                                      <a href="{{ route('courses.show', ['course' => $course->id]) }}">Visualizar</a> --}}
 
                                     <a href="{{ route('courses.edit', $course->id) }}"
-                                        class="btn btn-warning btn-sm me-1 mb-1 mb-md-0">Editar</a>
+                                        class="btn btn-warning btn-sm me-1 mb-1 mb-md-0"><i class="fa-regular fa-pen-to-square"></i> Editar</a>
 
                                     {{-- Para deletar sou obrigado a usar um 'form' e forçar o método 'delete' --}}
                                     {{-- <a href="{{ route('courses.destroy', $course->id) }}">Deletar</a> --}}
@@ -62,7 +62,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="btn btn-danger btn-sm me-1"
-                                            onclick="return confirm('Tem certeza que deseja deletar?')">Deletar</button>
+                                            onclick="return confirm('Tem certeza que deseja deletar?')"><i class="fa-regular fa-trash-can"></i> Deletar</button>
                                     </form>
 
                                 </td>
@@ -75,6 +75,9 @@
                     </tbody>
 
                 </table>
+
+                {{-- Imprimir a paginação --}}
+                {{ $courses->links() }}
 
             </div>
 
@@ -151,6 +154,5 @@
         @endforelse
     </ul> --}}
 
-    {{-- Imprimir a paginação --}}
-    {{-- {{ $courses->links() }} --}}
+
 @endsection

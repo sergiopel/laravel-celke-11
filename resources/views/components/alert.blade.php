@@ -1,19 +1,19 @@
 @if (session('success'))
-        <p style="color: #082">
-            {{ session('success') }}
-        </p>
+    <div class="alert alert-success" role="alert">
+        {{ session('success') }}
+    </div>
 @endif
 
 @if (session('error'))
-        <p style="color: #f00">
-            {{ session('error') }}
-        </p>
+    <div class="alert alert-danger" role="alert">
+        {{ session('error') }}
+    </div>
 @endif
 
 @if ($errors->any())
-    @foreach ($errors->all() as $error)
-        <p style="color: #f00;">
-            {{ $error }}
-        </p>
-    @endforeach
+    <div class="alert alert-danger" role="alert">
+        @foreach ($errors->all() as $error)
+            {{ $error }}<br>
+        @endforeach
+    </div>
 @endif
