@@ -7,7 +7,7 @@
 
             <ol class="breadcrumb mb-3 mt-3 ms-auto">
                 <li class="breadcrumb-item">
-                    <a href="#" class="text-decoration-none">Dashboard</a>
+                    <a href="{{ route('dashboard.index') }}" class="text-decoration-none">Dashboard</a>
                 </li>
                 <li class="breadcrumb-item active">Cursos</li>
             </ol>
@@ -61,7 +61,7 @@
                                     <form action="{{ route('courses.destroy', $course->id) }}" method="post">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-sm me-1"
+                                        <button type="submit" class="btn btn-danger btn-sm me-1"
                                             onclick="return confirm('Tem certeza que deseja deletar?')"><i class="fa-regular fa-trash-can"></i> Deletar</button>
                                     </form>
 
