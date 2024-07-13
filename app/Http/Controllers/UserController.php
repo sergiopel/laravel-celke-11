@@ -30,7 +30,7 @@ class UserController extends Controller
         DB::beginTransaction();
 
         try {
-            $course = User::create([
+            $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => $request->password
@@ -40,14 +40,14 @@ class UserController extends Controller
             DB::commit();
 
             // Salvar log
-            Log::info('Curso cadastrado. ' . $course->name, ['course_id' => $course->id]);
+            Log::info('Usuário cadastrado. ' . $user->name, ['user_id' => $user->id]);
 
-            return redirect()->route('users.show', ['user' => $course->id])->with('success', 'Usuário criado com sucesso!');
+            return redirect()->route('users.show', ['user' => $user->id])->with('success', 'Usuário criado com sucesso!');
         } catch (Exception $e) {
             DB::rollBack();
 
             // Salvar log
-            Log::warning('Curso não cadastrado.', ['error' => $e->getMessage()]);
+            Log::warning('Usuário não cadastrado.', ['error' => $e->getMessage()]);
 
             return back()->withInput()->with('error', 'Erro ao criar o usuário!');
         }
